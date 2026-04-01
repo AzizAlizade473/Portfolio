@@ -65,7 +65,7 @@ export default function Navbar() {
               </a>
             ))}
             <a
-              href="/Aziz Alizade Resume 2026.pdf"
+              href="/resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="ml-4 px-5 py-2 text-sm font-semibold rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white hover:shadow-lg hover:shadow-accent-purple/25 transition-all duration-300 hover:scale-105"
@@ -110,7 +110,7 @@ export default function Navbar() {
                 </motion.a>
               ))}
               <a
-                href="/Aziz Alizade Resume 2026.pdf"
+                href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileOpen(false)}

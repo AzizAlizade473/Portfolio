@@ -157,7 +157,7 @@ export default function Hero() {
             <HiArrowDown className="group-hover:translate-y-1 transition-transform" />
           </a>
           <a
-            href="/Aziz Alizade Resume 2026.pdf"
+            href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-3.5 rounded-full glass border border-white/10 text-white font-semibold text-base hover:bg-white/10 transition-all duration-300 hover:scale-105"
