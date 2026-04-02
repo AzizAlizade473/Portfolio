@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { HiMenuAlt3, HiX } from 'react-icons/hi'
+import { IconMenu, IconX } from './icons'
 
 const navLinks = [
   { name: 'About', href: '#about' },
@@ -16,24 +15,17 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
-    }
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
   }, [mobileOpen])
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+    <nav
+      className={`nav-enter fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? 'bg-dark-900/80 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/20'
           : 'bg-transparent'
@@ -80,48 +72,40 @@ export default function Navbar() {
             className="md:hidden text-white p-2 hover:bg-white/5 rounded-lg transition-colors"
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <HiX size={24} /> : <HiMenuAlt3 size={24} />}
+            {mobileOpen ? <IconX size={24} /> : <IconMenu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-dark-900/95 backdrop-blur-xl border-t border-white/5 overflow-hidden"
+      {/* Mobile Menu — CSS transition instead of AnimatePresence */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          mobileOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        } bg-dark-900/95 backdrop-blur-xl border-t border-white/5`}
+      >
+        <div className="px-4 py-6 space-y-1">
+          {navLinks.map((link, i) => (
+            <a
+              key={link.name}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all font-medium"
+              style={{ transitionDelay: mobileOpen ? `${i * 50}ms` : '0ms' }}
+            >
+              {link.name}
+            </a>
+          ))}
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileOpen(false)}
+            className="block mt-4 text-center px-5 py-3 text-sm font-semibold rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white"
           >
-            <div className="px-4 py-6 space-y-1">
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  onClick={() => setMobileOpen(false)}
-                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all font-medium"
-                >
-                  {link.name}
-                </motion.a>
-              ))}
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileOpen(false)}
-                className="block mt-4 text-center px-5 py-3 text-sm font-semibold rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white"
-              >
-                Resume
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+            Resume
+          </a>
+        </div>
+      </div>
+    </nav>
   )
 }

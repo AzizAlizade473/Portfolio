@@ -1,47 +1,48 @@
-import { motion } from 'framer-motion'
+import useInView from '../hooks/useInView'
 import {
-  SiPython, SiCplusplus, SiReact, SiTypescript,
-  SiHtml5, SiJavascript, SiTensorflow,
-} from 'react-icons/si'
-import { FaJava, FaChartBar } from 'react-icons/fa'
-import { HiAcademicCap } from 'react-icons/hi'
+  IconPython, IconCpp, IconReact, IconTypeScript,
+  IconHtml, IconJava, IconJavaScript, IconTensorflow,
+  IconChart, IconAcademicCap,
+} from './icons'
 
 const skills = [
-  { name: 'Python', icon: SiPython, color: '#3776ab' },
-  { name: 'C++', icon: SiCplusplus, color: '#00599c' },
-  { name: 'React', icon: SiReact, color: '#61dafb' },
-  { name: 'React Native', icon: SiReact, color: '#61dafb' },
-  { name: 'TypeScript', icon: SiTypescript, color: '#3178c6' },
-  { name: 'HTML/CSS', icon: SiHtml5, color: '#e34f26' },
-  { name: 'Java', icon: FaJava, color: '#ed8b00' },
-  { name: 'JavaScript', icon: SiJavascript, color: '#f7df1e' },
-  { name: 'Machine Learning', icon: SiTensorflow, color: '#ff6f00' },
-  { name: 'Data Analytics', icon: FaChartBar, color: '#22d3ee' },
+  { name: 'Python', icon: IconPython, color: '#3776ab' },
+  { name: 'C++', icon: IconCpp, color: '#00599c' },
+  { name: 'React', icon: IconReact, color: '#61dafb' },
+  { name: 'React Native', icon: IconReact, color: '#61dafb' },
+  { name: 'TypeScript', icon: IconTypeScript, color: '#3178c6' },
+  { name: 'HTML/CSS', icon: IconHtml, color: '#e34f26' },
+  { name: 'Java', icon: IconJava, color: '#ed8b00' },
+  { name: 'JavaScript', icon: IconJavaScript, color: '#f7df1e' },
+  { name: 'Machine Learning', icon: IconTensorflow, color: '#ff6f00' },
+  { name: 'Data Analytics', icon: IconChart, color: '#22d3ee' },
 ]
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.05, ease: 'easeOut' },
-  }),
+function AnimatedDiv({ children, className = '', delay = 0 }) {
+  const [ref, isInView] = useInView({ margin: '-80px' })
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${isInView ? 'revealed' : ''} ${className}`}
+      style={delay ? { transitionDelay: `${delay}ms` } : undefined}
+    >
+      {children}
+    </div>
+  )
 }
 
 export default function About() {
+  const [headerRef, headerInView] = useInView({ margin: '-80px' })
+  const [skillsRef, skillsInView] = useInView({ margin: '-80px' })
+
   return (
-    <section id="about" className="section-padding relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-accent-purple/5 rounded-full blur-[120px]" />
+    <section id="about" className="section-padding relative overflow-hidden cv-auto">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-accent-purple/5 rounded-full blur-[120px]" aria-hidden="true" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Section header */}
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={fadeUp}
-          className="mb-16"
+        <div
+          ref={headerRef}
+          className={`reveal ${headerInView ? 'revealed' : ''} mb-16`}
         >
           <span className="text-accent-blue text-sm font-semibold tracking-widest uppercase mb-3 block">
             About Me
@@ -50,17 +51,11 @@ export default function About() {
             Turning ideas into{' '}
             <span className="gradient-text">reality</span>
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-start">
           {/* Bio */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            variants={fadeUp}
-            className="lg:col-span-3 space-y-6"
-          >
+          <AnimatedDiv className="lg:col-span-3 space-y-6">
             <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
               <p className="text-gray-300 leading-relaxed text-base sm:text-lg">
                 I'm a <span className="text-white font-semibold">2nd year Computer Science student</span> at{' '}
@@ -87,31 +82,21 @@ export default function About() {
                 { value: '8.0', label: 'IELTS Score' },
                 { value: '4', label: 'Languages' },
               ].map((stat, i) => (
-                <motion.div
+                <AnimatedDiv
                   key={stat.label}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  custom={i}
-                  variants={fadeUp}
+                  delay={i * 80}
                   className="glass rounded-xl p-4 text-center hover:bg-white/[0.06] transition-colors duration-300"
                 >
                   <div className="text-2xl sm:text-3xl font-bold gradient-text">{stat.value}</div>
                   <div className="text-xs sm:text-sm text-gray-400 mt-1">{stat.label}</div>
-                </motion.div>
+                </AnimatedDiv>
               ))}
             </div>
 
             {/* Languages */}
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              className="glass rounded-2xl p-6"
-            >
+            <AnimatedDiv className="glass rounded-2xl p-6">
               <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                <HiAcademicCap className="text-accent-blue" />
+                <IconAcademicCap size={20} className="text-accent-blue" />
                 Languages
               </h3>
               <div className="flex flex-wrap gap-3">
@@ -129,25 +114,18 @@ export default function About() {
                   </span>
                 ))}
               </div>
-            </motion.div>
-          </motion.div>
+            </AnimatedDiv>
+          </AnimatedDiv>
 
           {/* Skills */}
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            className="lg:col-span-2"
-          >
+          <div ref={skillsRef} className="lg:col-span-2">
             <h3 className="text-white font-semibold text-lg mb-6">Tech Stack</h3>
             <div className="grid grid-cols-2 gap-3">
               {skills.map((skill, i) => (
-                <motion.div
+                <div
                   key={skill.name}
-                  custom={i}
-                  variants={fadeUp}
-                  whileHover={{ scale: 1.05, y: -4 }}
-                  className="glass rounded-xl p-4 flex items-center gap-3 cursor-default hover:bg-white/[0.06] transition-colors duration-300 group"
+                  className={`reveal ${skillsInView ? 'revealed' : ''} glass rounded-xl p-4 flex items-center gap-3 cursor-default hover:bg-white/[0.06] transition-colors duration-300 group hover:-translate-y-1 hover:scale-[1.03]`}
+                  style={{ transitionDelay: skillsInView ? `${i * 50}ms` : '0ms' }}
                 >
                   <skill.icon
                     size={22}
@@ -157,10 +135,10 @@ export default function About() {
                   <span className="text-sm text-gray-300 group-hover:text-white transition-colors font-medium">
                     {skill.name}
                   </span>
-                </motion.div>
+                </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

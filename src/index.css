@@ -37,18 +37,14 @@ body {
   border-radius: 3px;
 }
 
-/* ===== Glassmorphism Utility ===== */
+/* ===== Glassmorphism Utility (optimized — no backdrop-filter for perf) ===== */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(18, 18, 26, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(22, 22, 35, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -67,33 +63,8 @@ body {
   background-clip: text;
 }
 
-/* ===== Glow Effects ===== */
-.glow-border {
-  position: relative;
-}
-
-.glow-border::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.glow-border:hover::before {
-  opacity: 1;
-}
-
-/* ===== Animated Background Gradient ===== */
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.animated-gradient-bg {
+/* ===== Hero Background (static gradient — no continuous animation) ===== */
+.hero-bg {
   background: linear-gradient(
     -45deg,
     #0a0a0f,
@@ -101,8 +72,6 @@ body {
     #0a0a0f,
     #12101f
   );
-  background-size: 400% 400%;
-  animation: gradient-shift 15s ease infinite;
 }
 
 /* ===== Section Padding ===== */
@@ -110,7 +79,13 @@ body {
   @apply px-4 sm:px-6 lg:px-8 xl:px-16 py-20 lg:py-28;
 }
 
-/* ===== Floating Animation ===== */
+/* ===== Content Visibility for below-fold sections ===== */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
+}
+
+/* ===== Floating Animation (GPU-accelerated, only transform+opacity) ===== */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-20px); }
@@ -118,6 +93,7 @@ body {
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes float-delayed {
@@ -128,20 +104,131 @@ body {
 .animate-float-delayed {
   animation: float-delayed 8s ease-in-out infinite;
   animation-delay: 2s;
+  will-change: transform;
 }
 
-/* ===== Pulse Glow ===== */
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.15); }
-  50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.3); }
+/* ===== CSS Particles (replacing 30 JS-animated motion.divs) ===== */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  will-change: transform, opacity;
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 4s ease-in-out infinite;
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0); opacity: 0.1; }
+  50% { transform: translateY(-30px); opacity: 0.4; }
 }
+
+.particle-1 { left: 15%; top: 20%; animation: particle-float 5s ease-in-out infinite; }
+.particle-2 { left: 35%; top: 60%; animation: particle-float 7s ease-in-out 1s infinite; }
+.particle-3 { left: 55%; top: 30%; animation: particle-float 6s ease-in-out 2s infinite; }
+.particle-4 { left: 75%; top: 70%; animation: particle-float 8s ease-in-out 0.5s infinite; }
+.particle-5 { left: 85%; top: 15%; animation: particle-float 5.5s ease-in-out 3s infinite; }
+.particle-6 { left: 25%; top: 80%; animation: particle-float 7.5s ease-in-out 1.5s infinite; }
 
 /* ===== Selection ===== */
 ::selection {
   background: rgba(99, 102, 241, 0.3);
   color: #ffffff;
+}
+
+/* ===== CSS Fade Up for LCP Elements ===== */
+@keyframes fade-up {
+  from {
+    opacity: 0.01;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out forwards;
+}
+
+.animate-fade-up-delay-1 {
+  animation: fade-up 0.5s ease-out 0.15s forwards;
+  opacity: 0.01;
+}
+
+.animate-fade-up-delay-2 {
+  animation: fade-up 0.5s ease-out 0.3s forwards;
+  opacity: 0.01;
+}
+
+/* ===== Scroll-triggered reveal animations (replaces framer-motion whileInView) ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.reveal-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ===== Navbar enter animation ===== */
+@keyframes nav-enter {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.nav-enter {
+  animation: nav-enter 0.6s ease-out forwards;
+}
+
+/* ===== Scroll indicator ===== */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* ===== Reduce motion for accessibility ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal, .reveal-left, .reveal-scale {
+    opacity: 1;
+    transform: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
 }

@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
-import { FiGithub, FiExternalLink, FiAward } from 'react-icons/fi'
+import useInView from '../hooks/useInView'
+import { IconGithub, IconAward } from './icons'
 
 const projects = [
   {
@@ -56,29 +56,113 @@ const projects = [
   },
 ]
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.1, ease: 'easeOut' },
-  }),
+function ProjectCard({ project, index, featured }) {
+  const [ref, isInView] = useInView({ margin: '-40px' })
+
+  if (featured) {
+    return (
+      <div
+        ref={ref}
+        className={`reveal ${isInView ? 'revealed' : ''} group relative glass rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300`}
+        style={{ transitionDelay: isInView ? `${index * 100}ms` : '0ms' }}
+      >
+        <div className={`h-1 bg-gradient-to-r ${project.gradient}`} />
+        <div className="p-6 sm:p-8">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:gradient-text transition-all duration-300">
+                {project.title}
+              </h3>
+              {project.award && (
+                <div className="flex items-center gap-1.5 mt-2 text-sm text-amber-400">
+                  <IconAward size={14} />
+                  <span>{project.award}</span>
+                </div>
+              )}
+            </div>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-full glass border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition-all duration-300 hover:scale-110 shrink-0"
+              aria-label={`View ${project.title} on GitHub`}
+            >
+              <IconGithub size={18} />
+            </a>
+          </div>
+          <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-6">
+            {project.description}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {project.stack.map((tech) => (
+              <span
+                key={tech}
+                className="px-3 py-1 text-xs font-medium rounded-full bg-white/5 text-gray-300 border border-white/10"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={`reveal ${isInView ? 'revealed' : ''} group glass rounded-xl overflow-hidden hover:-translate-y-1.5 transition-all duration-300`}
+      style={{ transitionDelay: isInView ? `${index * 100}ms` : '0ms' }}
+    >
+      <div className={`h-0.5 bg-gradient-to-r ${project.gradient}`} />
+      <div className="p-5">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-bold text-white group-hover:gradient-text transition-all">
+            {project.title}
+          </h3>
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-white transition-colors"
+            aria-label={`View ${project.title} on GitHub`}
+          >
+            <IconGithub size={16} />
+          </a>
+        </div>
+        {project.award && (
+          <div className="flex items-center gap-1.5 mb-3 text-xs text-amber-400">
+            <IconAward size={12} />
+            <span>{project.award}</span>
+          </div>
+        )}
+        <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
+          {project.description}
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {project.stack.map((tech) => (
+            <span
+              key={tech}
+              className="px-2 py-0.5 text-[11px] font-medium rounded-full bg-white/5 text-gray-400"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default function Projects() {
+  const [headerRef, headerInView] = useInView({ margin: '-80px' })
+
   return (
-    <section id="projects" className="section-padding relative overflow-hidden">
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-blue/5 rounded-full blur-[120px]" />
+    <section id="projects" className="section-padding relative overflow-hidden cv-auto">
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-blue/5 rounded-full blur-[120px]" aria-hidden="true" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
-        >
+        <div ref={headerRef} className={`reveal ${headerInView ? 'revealed' : ''} mb-16`}>
           <span className="text-accent-blue text-sm font-semibold tracking-widest uppercase mb-3 block">
             Projects
           </span>
@@ -86,73 +170,14 @@ export default function Projects() {
             Things I've{' '}
             <span className="gradient-text">built</span>
           </h2>
-        </motion.div>
+        </div>
 
         {/* Featured Projects */}
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           {projects
             .filter((p) => p.featured)
             .map((project, i) => (
-              <motion.div
-                key={project.title}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-50px' }}
-                custom={i}
-                variants={fadeUp}
-                whileHover={{ y: -8 }}
-                className="group relative glass rounded-2xl overflow-hidden"
-              >
-                {/* Gradient top bar */}
-                <div className={`h-1 bg-gradient-to-r ${project.gradient}`} />
-
-                <div className="p-6 sm:p-8">
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:gradient-text transition-all duration-300">
-                        {project.title}
-                      </h3>
-                      {project.award && (
-                        <div className="flex items-center gap-1.5 mt-2 text-sm text-amber-400">
-                          <FiAward />
-                          <span>{project.award}</span>
-                        </div>
-                      )}
-                    </div>
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2.5 rounded-full glass border border-white/10 text-gray-400 hover:text-white hover:border-white/20 transition-all duration-300 hover:scale-110 shrink-0"
-                      aria-label={`View ${project.title} on GitHub`}
-                    >
-                      <FiGithub size={18} />
-                    </a>
-                  </div>
-
-                  <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-6">
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {project.stack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 text-xs font-medium rounded-full bg-white/5 text-gray-300 border border-white/10"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Hover glow */}
-                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br ${project.gradient} mix-blend-overlay pointer-events-none`} style={{ opacity: 0 }} />
-                <div className={`absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl border border-transparent bg-clip-border pointer-events-none`} style={{
-                  background: `linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1))`,
-                  opacity: 0,
-                }} />
-              </motion.div>
+              <ProjectCard key={project.title} project={project} index={i} featured />
             ))}
         </div>
 
@@ -161,53 +186,7 @@ export default function Projects() {
           {projects
             .filter((p) => !p.featured)
             .map((project, i) => (
-              <motion.div
-                key={project.title}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-50px' }}
-                custom={i}
-                variants={fadeUp}
-                whileHover={{ y: -6 }}
-                className="group glass rounded-xl overflow-hidden"
-              >
-                <div className={`h-0.5 bg-gradient-to-r ${project.gradient}`} />
-                <div className="p-5">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-bold text-white group-hover:gradient-text transition-all">
-                      {project.title}
-                    </h3>
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-500 hover:text-white transition-colors"
-                      aria-label={`View ${project.title} on GitHub`}
-                    >
-                      <FiGithub size={16} />
-                    </a>
-                  </div>
-                  {project.award && (
-                    <div className="flex items-center gap-1.5 mb-3 text-xs text-amber-400">
-                      <FiAward className="text-[10px]" />
-                      <span>{project.award}</span>
-                    </div>
-                  )}
-                  <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.stack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-0.5 text-[11px] font-medium rounded-full bg-white/5 text-gray-400"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
+              <ProjectCard key={project.title} project={project} index={i} />
             ))}
         </div>
       </div>
