@@ -6,15 +6,17 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
-    target: 'es2020',
+    target: 'esnext',
     cssCodeSplit: true,
     cssMinify: 'esbuild',
     chunkSizeWarningLimit: 500,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-        },
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        }
       },
     },
     minify: 'esbuild',

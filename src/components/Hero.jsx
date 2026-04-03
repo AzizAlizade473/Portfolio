@@ -85,13 +85,13 @@ export default function Hero() {
         </div>
 
         {/* Name — LCP element */}
-        <h1 className="animate-fade-up-delay-1 text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6">
           <span className="text-white">Aziz </span>
           <span className="gradient-text">Alizade</span>
         </h1>
 
         {/* Typing effect */}
-        <div className="animate-fade-up-delay-1 h-12 sm:h-14 flex items-center justify-center mb-8">
+        <div className="h-12 sm:h-14 flex items-center justify-center mb-8">
           <span className="text-xl sm:text-2xl md:text-3xl font-light text-gray-300">
             {displayText}
           </span>
