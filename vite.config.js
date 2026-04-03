@@ -8,6 +8,8 @@ export default defineConfig({
     sourcemap: false,
     target: 'es2020',
     cssCodeSplit: true,
+    cssMinify: 'esbuild',
+    chunkSizeWarningLimit: 500,
     rollupOptions: {
       output: {
         manualChunks: {

@@ -3,21 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="theme-color" content="#0a0a0f" />
+    
+    <title>Aziz Alizade | Software Engineer & Tech Founder</title>
     <meta name="description" content="Aziz Alizade – Software Engineer, AI & ML Enthusiast, and Tech Founder. CS student at Baku Higher Oil School. Explore projects, achievements, and experience." />
     <meta name="keywords" content="Aziz Alizade, Software Engineer, AI, Machine Learning, Portfolio, BHOS, Epsilon" />
     <meta name="author" content="Aziz Alizade" />
-    <meta property="og:title" content="Aziz Alizade | Portfolio" />
-    <meta property="og:description" content="Software Engineer & Tech Founder | CS Student @ Baku Higher Oil School" />
+    <link rel="canonical" href="https://azizalizade.com" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" /></noscript>
-    <title>Aziz Alizade | Software Engineer & Tech Founder</title>
+    <meta property="og:url" content="https://azizalizade.com/" />
+    <meta property="og:title" content="Aziz Alizade | Software Engineer & Tech Founder" />
+    <meta property="og:description" content="Software Engineer & Tech Founder | CS Student @ Baku Higher Oil School" />
+    <meta property="og:image" content="https://azizalizade.com/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://azizalizade.com/" />
+    <meta property="twitter:title" content="Aziz Alizade | Software Engineer & Tech Founder" />
+    <meta property="twitter:description" content="Software Engineer & Tech Founder | CS Student @ Baku Higher Oil School" />
+    <meta property="twitter:image" content="https://azizalizade.com/og-image.jpg" />
+
+    <link rel="preconnect" href="https://vitals.vercel-insights.com" crossorigin />
+    
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Aziz Alizade",
+      "url": "https://azizalizade.com",
+      "jobTitle": "Software Engineer & Tech Founder",
+      "alumniOf": "Baku Higher Oil School",
+      "sameAs": [
+        "https://github.com/AzizAlizade473",
+        "https://www.linkedin.com/in/aziz-alizade-5567002a1/"
+      ]
+    }
+    </script>
   </head>
   <body>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent-blue focus:text-white focus:top-4 focus:left-4 focus:rounded-md">Skip to primary content</a>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" defer src="/src/main.jsx"></script>
   </body>
 </html>

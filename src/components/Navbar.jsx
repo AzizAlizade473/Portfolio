@@ -27,7 +27,7 @@ export default function Navbar() {
     <nav
       className={`nav-enter fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-dark-900/80 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/20'
+          ? 'bg-dark-900/95 border-b border-white/5 shadow-lg shadow-black/20'
           : 'bg-transparent'
       }`}
     >
@@ -69,7 +69,7 @@ export default function Navbar() {
           {/* Mobile Toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden text-white p-2 hover:bg-white/5 rounded-lg transition-colors"
+            className="md:hidden text-white w-11 h-11 flex items-center justify-center hover:bg-white/5 rounded-lg transition-colors"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <IconX size={24} /> : <IconMenu size={24} />}
@@ -81,7 +81,7 @@ export default function Navbar() {
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
           mobileOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        } bg-dark-900/95 backdrop-blur-xl border-t border-white/5`}
+        } bg-dark-900/95 border-t border-white/5`}
       >
         <div className="px-4 py-6 space-y-1">
           {navLinks.map((link, i) => (

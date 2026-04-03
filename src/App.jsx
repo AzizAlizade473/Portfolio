@@ -13,7 +13,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-dark-900 text-white font-sans">
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
         <Suspense fallback={null}>
           <About />
