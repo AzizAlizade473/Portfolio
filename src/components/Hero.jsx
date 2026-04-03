@@ -15,8 +15,17 @@ export default function Hero() {
   const [hasStartedTyping, setHasStartedTyping] = useState(false)
 
   useEffect(() => {
-    const startTimer = setTimeout(() => setHasStartedTyping(true), 1500)
-    return () => clearTimeout(startTimer)
+    let idleId;
+    let fallbackId;
+    if ('requestIdleCallback' in window) {
+      idleId = requestIdleCallback(() => setHasStartedTyping(true), { timeout: 2000 });
+    } else {
+      fallbackId = setTimeout(() => setHasStartedTyping(true), 1500);
+    }
+    return () => {
+      if (idleId) cancelIdleCallback(idleId);
+      if (fallbackId) clearTimeout(fallbackId);
+    };
   }, [])
 
   const tick = useCallback(() => {
